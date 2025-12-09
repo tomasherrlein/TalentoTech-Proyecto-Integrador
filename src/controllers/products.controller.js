@@ -34,10 +34,16 @@ export const getOneProductById = async (req, res) => {
 
 export const createOneProduct = async (req, res) => {
   try {
-    const productData = req.body;
-    await createProduct(productData);
+    if (!req.body.name) {
+      return res.status(422).json({ error: "El nombre es obligatorio" });
+    }
 
-    res.status(201).json({ message: "Producto creado exitosamente" });
+    const productData = req.body;
+    const createdProduct = await createProduct(productData);
+
+    res
+      .status(201)
+      .json({ message: "Producto creado exitosamente", createdProduct });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al crear el producto" });
@@ -47,6 +53,13 @@ export const createOneProduct = async (req, res) => {
 export const deleteOneProduct = async (req, res) => {
   try {
     const { id } = req.params;
+    const product = await getProductById(id);
+    if (!product) {
+      return res
+        .status(404)
+        .json({ error: "Producto no encontrado, no se pudo eliminar" });
+    }
+
     await deleteProduct(id);
 
     res.json({ message: "Producto eliminado" });
@@ -61,9 +74,9 @@ export const updateOneProduct = async (req, res) => {
     const { id } = req.params;
     const newContent = req.body;
 
-    await updateProduct(id, newContent);
+    const updatedProduct = await updateProduct(id, newContent);
 
-    res.json({ message: "Producto actualizado" });
+    res.json({ message: "Producto actualizado", updatedProduct });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al actualizar" });

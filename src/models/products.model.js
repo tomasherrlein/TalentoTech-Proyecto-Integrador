@@ -31,7 +31,8 @@ export async function getAllProducts() {
 }
 
 export async function createProduct(product) {
-  await addDoc(productsCollection, product);
+  const docRef = await addDoc(productsCollection, product);
+  return { id: docRef.id, ...product };
 }
 
 export async function deleteProduct(id) {
@@ -39,6 +40,8 @@ export async function deleteProduct(id) {
 }
 
 export async function updateProduct(id, newContent) {
-  const doc = doc(productsCollection, id);
-  await updateDoc(doc, newContent);
+  const docRef = doc(productsCollection, id);
+  await updateDoc(docRef, newContent);
+  const snapshot = await getDoc(docRef);
+  return { id: snapshot.id, ...snapshot.data() };
 }

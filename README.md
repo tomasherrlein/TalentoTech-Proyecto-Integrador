@@ -39,9 +39,9 @@ npm run dev
 
 El servidor se ejecutará normalmente en `http://localhost:3000` (o el puerto que esté configurado).
 
-## Aplicación de prueba
+## Despliegue de prueba
 
-También cuenta con una versión desplegada en vercel en
+También cuenta con una versión desplegada en vercel en https://talento-tech-proyecto-integrador.vercel.app/ para poder realizar peticiones de prueba directamente.
 
 ### Autenticación
 
